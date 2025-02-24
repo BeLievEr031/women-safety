@@ -1,8 +1,11 @@
 import React from 'react'
+import EmergencyContacts from './EmergencyContact'
 
 function Alert() {
     return (
-        <div>Alert</div>
+        <React.Fragment>
+            <EmergencyContacts />
+        </React.Fragment>
     )
 }
 
