@@ -2,11 +2,34 @@ import { Request, Response, NextFunction } from "express";
 import { validationResult } from "express-validator";
 import ContactService from "../services/ContactService";
 import { HTTP_STATUS } from "../utils/constant";
-import { ContactRequest, PaginationRequest } from "../types";
+import { ContactRequest, PaginationRequest, SendAlertRequest } from "../types";
+import sendOTPs from "../utils/sendAlertMsg";
 
 class ContactController {
     constructor(private contactService: ContactService) {
         this.contactService = contactService;
+    }
+
+    // Send Notification
+
+    async sendAlert(req: SendAlertRequest, res: Response, next: NextFunction) {
+        try {
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                res.status(HTTP_STATUS.BAD_REQUEST).json({ errors: errors.array() });
+                return;
+            }
+
+            const { number } = req.body;
+            await sendOTPs(number)
+
+            res.status(HTTP_STATUS.OK).json({
+                success: true,
+                message: "Alert has been sent."
+            })
+        } catch (error) {
+            next(error)
+        }
     }
 
     // Create Contact

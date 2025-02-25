@@ -6,8 +6,18 @@ export interface IContact {
     phone: string;
 }
 
+
 export interface ContactRequest extends Request {
     body: IContact
+}
+
+
+export interface IPhone {
+    number: string[]
+}
+
+export interface SendAlertRequest {
+    body: IPhone
 }
 
 export interface PaginationRequest extends Request {

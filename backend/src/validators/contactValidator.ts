@@ -36,3 +36,26 @@ export const contactValidator = checkSchema({
         }
     }
 });
+
+
+export const validateMobileNumbers = checkSchema({
+    mobileNumbers: {
+        in: ["body"], // The array should be in the request body
+        isArray: {
+            errorMessage: "mobileNumbers must be an array",
+        },
+        notEmpty: {
+            errorMessage: "mobileNumbers array should not be empty",
+        },
+        custom: {
+            options: (value) => {
+                const phoneRegex = /^\+91[6-9]\d{9}$/;
+                if (!value.every((num: string) => typeof num === "string" && phoneRegex.test(num))) {
+                    throw new Error("Each mobile number must be a valid string of 10 digits.");
+                }
+                return true;
+            },
+        },
+    },
+});
+

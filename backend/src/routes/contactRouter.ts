@@ -8,6 +8,9 @@ const contactRouter = express.Router();
 const contactService = new ContactService();
 const contactController = new ContactController(contactService);
 
+
+contactRouter.post("/alert", (req: Request, res: Response, next: NextFunction) => contactController.create(req as ContactRequest, res, next))
+
 // Create Contact
 contactRouter.post("/", contactValidator, (req: Request, res: Response, next: NextFunction) => contactController.create(req as ContactRequest, res, next));
 
