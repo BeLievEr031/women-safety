@@ -1,6 +1,7 @@
 import express from "express"
 import cors from "cors"
 import contactRouter from "./routes/contactRouter";
+import alertRouter from "./routes/alertRouter";
 
 const app = express();
 
@@ -13,4 +14,5 @@ app.use(cors({
 
 
 app.use("/api/v1/contact", contactRouter)
+app.use("/api/v1/alert", alertRouter)
 export default app;
