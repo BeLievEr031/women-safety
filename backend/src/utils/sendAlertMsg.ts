@@ -3,7 +3,7 @@ import Config from "../config/Config";
 import logger from "../config/logger";
 // Configure AWS SNS
 AWS.config.update({
-    region: Config.AWS_BUCKET_NAME, // Change to your AWS SNS region
+    region: Config.AWS_REGION, // Change to your AWS SNS region
     accessKeyId: Config.AWS_ACCESS_ID,
     secretAccessKey: Config.AWS_SECRET_KEY,
 });
@@ -21,7 +21,7 @@ const sendOTPs = async (phoneNumbers: string[]) => {
                 const otp = Math.floor(100000 + Math.random() * 900000).toString(); // Generate OTP
 
                 const params = {
-                    Message: `Your OTP code is: ${otp}`,
+                    Message: `Hi bind kaisa he `,
                     PhoneNumber: phoneNumber, // Must be in E.164 format
                 };
 

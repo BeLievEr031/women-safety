@@ -13,3 +13,7 @@ export interface IPagination {
     clerkId?: string;
     userId?: string;
 }
+
+export interface IPhone {
+    numbers: string[]
+}

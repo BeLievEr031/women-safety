@@ -1,15 +1,15 @@
 import express, { Request, Response, NextFunction } from "express";
 import ContactController from "../controller/ContactController";
 import ContactService from "../services/ContactService";
-import { contactValidator } from "../validators/contactValidator";
-import { ContactRequest, PaginationRequest } from "../types";
+import { contactValidator, validateMobileNumbers } from "../validators/contactValidator";
+import { ContactRequest, PaginationRequest, SendAlertRequest } from "../types";
 const contactRouter = express.Router();
 
 const contactService = new ContactService();
 const contactController = new ContactController(contactService);
 
 
-contactRouter.post("/alert", (req: Request, res: Response, next: NextFunction) => contactController.create(req as ContactRequest, res, next))
+contactRouter.post("/alert", validateMobileNumbers, (req: Request, res: Response, next: NextFunction) => contactController.sendAlert(req as SendAlertRequest, res, next))
 
 // Create Contact
 contactRouter.post("/", contactValidator, (req: Request, res: Response, next: NextFunction) => contactController.create(req as ContactRequest, res, next));

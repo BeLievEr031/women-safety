@@ -20,8 +20,8 @@ class ContactController {
                 return;
             }
 
-            const { number } = req.body;
-            await sendOTPs(number)
+            const { numbers } = req.body;
+            await sendOTPs(numbers)
 
             res.status(HTTP_STATUS.OK).json({
                 success: true,

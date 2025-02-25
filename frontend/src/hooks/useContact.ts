@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { createContact, deleteContact, fetchContact } from "../http/api"
+import { createContact, deleteContact, fetchContact, sendAlert } from "../http/api"
 import { IPagination } from "../types"
 
 export const useContactFetchQuery = (pagination: IPagination) => {
@@ -27,5 +27,11 @@ export const useContactDeleteMutation = () => {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["fetch-emergency-contact"] })
         }
+    })
+}
+
+export const useAlertMutation = () => {
+    return useMutation({
+        mutationFn: sendAlert,
     })
 }

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import AddContactForm from "./AddContactForm";
 import EditContactForm from "./EditContactForm";
-import { useContactAddMutation, useContactDeleteMutation, useContactFetchQuery } from "../../hooks/useContact";
+import { useAlertMutation, useContactAddMutation, useContactDeleteMutation, useContactFetchQuery } from "../../hooks/useContact";
 import { useUser } from "@clerk/clerk-react";
 import { IContact, IPagination } from "../../types";
 
@@ -14,7 +14,7 @@ interface Contact {
 const EmergencyContacts: React.FC = () => {
     const { mutate } = useContactAddMutation();
     const { mutate: deleteMutation } = useContactDeleteMutation();
-
+    const { mutate: alertMutation } = useAlertMutation();
     const { user } = useUser();
 
     const [pagination] = useState<IPagination>({
@@ -62,9 +62,20 @@ const EmergencyContacts: React.FC = () => {
 
     console.log(data);
 
+    const handleSendAlert = () => {
+
+        const numbers = data?.data?.data?.contacts.map((item: IContact) => {
+            return item.phone
+        })
+
+        console.log(numbers);
+
+        alertMutation({ numbers });
+    }
+
     return (
         <div className="max-w-3xl mx-auto mt-10 text-center">
-            <button className="bg-blue-600 text-white px-6 py-2 rounded-md mb-6">
+            <button className="bg-blue-600 text-white px-6 py-2 rounded-md mb-6" onClick={handleSendAlert}>
                 Alert Now
             </button>
 

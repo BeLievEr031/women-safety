@@ -39,7 +39,7 @@ export const contactValidator = checkSchema({
 
 
 export const validateMobileNumbers = checkSchema({
-    mobileNumbers: {
+    numbers: {
         in: ["body"], // The array should be in the request body
         isArray: {
             errorMessage: "mobileNumbers must be an array",
