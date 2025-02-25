@@ -16,7 +16,7 @@ const AddContactForm: React.FC<Props> = ({ onAddContact, onClose }) => {
     };
 
     return (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
+        <div className="fixed inset-0 z-[999] bg-black/50 flex items-center justify-center">
             <div className="bg-white p-6 rounded-lg shadow-lg w-96">
                 <h2 className="text-xl font-semibold mb-4">Add Emergency Contact</h2>
                 <form onSubmit={handleSubmit} className="space-y-4">
