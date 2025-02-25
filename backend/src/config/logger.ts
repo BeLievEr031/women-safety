@@ -14,7 +14,7 @@ const logger = winston.createLogger({
         winston.format.timestamp(),
         winston.format.json(),
     ),
-    defaultMeta: { service: 'aspirant' },
+    defaultMeta: { service: 'women-safety' },
     transports: [
         new winston.transports.Console({
             format: winston.format.combine(

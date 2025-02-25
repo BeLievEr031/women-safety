@@ -1,6 +1,14 @@
-import logger from './config/logger';
+import express from "express"
+import cors from "cors"
 
-let x = 45;
-x = 'djkdjk';
-// console.log(x);
-logger.info(x);
+const app = express();
+
+app.use(express.json({ limit: "1MB" }))
+app.use(express.urlencoded({ extended: true, limit: "1MB" }))
+app.use(cors({
+    credentials: true,
+    origin: ["http://localhost:5173"]
+}))
+
+
+export default app;
