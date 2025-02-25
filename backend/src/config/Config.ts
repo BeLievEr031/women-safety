@@ -1,14 +1,15 @@
 import dotenvFlow from 'dotenv-flow';
 dotenvFlow.config();
 
-const { PORT,
+const {
+    PORT,
     DB_URI,
     NODE_ENV,
     AWS_ACCESS_ID,
     AWS_SECRET_KEY,
     AWS_REGION,
-    AWS_BUCKET_NAME
-} = process.env
+    AWS_BUCKET_NAME,
+} = process.env;
 
 const Config = {
     PORT,
@@ -17,8 +18,7 @@ const Config = {
     AWS_ACCESS_ID,
     AWS_SECRET_KEY,
     AWS_REGION,
-    AWS_BUCKET_NAME
-
+    AWS_BUCKET_NAME,
 } as const;
 
 export default Config;
