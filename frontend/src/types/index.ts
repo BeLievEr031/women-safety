@@ -17,3 +17,9 @@ export interface IPagination {
 export interface IPhone {
     numbers: string[]
 }
+
+export interface IAlert {
+    lat: number;
+    lng: number;
+    clerkId: string;
+}
