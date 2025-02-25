@@ -1,13 +1,41 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import EmergencyContacts from './EmergencyContact'
 import Map from '../../components/ui/Map'
 
 function Alert() {
+    const [location, setLocation] = useState<[number, number]>([0, 0]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        if (!navigator.geolocation) {
+            setError("Geolocation is not supported by your browser.");
+            setLoading(false);
+            return;
+        }
+
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                setLocation([position.coords.latitude, position.coords.longitude]);
+                setError(null);
+                setLoading(false);
+            },
+            (error) => {
+                console.log("Error ", error);
+                setError(error.message);
+                setLoading(false);
+            }
+        );
+    }, []);
     return (
         <React.Fragment>
-            <EmergencyContacts />
+            <EmergencyContacts location={location} loading={loading} />
             <div className='my-16 w-11/12 mx-auto'>
-                <Map />
+                <Map
+                    location={location}
+                    loading={loading}
+                    error={error} />
+
             </div>
         </React.Fragment>
     )

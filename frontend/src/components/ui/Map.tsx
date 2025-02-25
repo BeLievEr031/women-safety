@@ -1,7 +1,7 @@
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 // Fix default icon issue in Leaflet with Webpack
 import "leaflet-defaulticon-compatibility";
@@ -44,31 +44,15 @@ const MarkerWithZoom = ({ position }: { position: [number, number] }) => {
     );
 };
 
-const Map: React.FC = () => {
-    const [location, setLocation] = useState<[number, number]>([0, 0]);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
-        if (!navigator.geolocation) {
-            setError("Geolocation is not supported by your browser.");
-            setLoading(false);
-            return;
-        }
+interface IMapProp {
+    loading: boolean;
+    error: string | null;
+    location: [number, number]
+}
 
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                setLocation([position.coords.latitude, position.coords.longitude]);
-                setError(null);
-                setLoading(false);
-            },
-            (error) => {
-                console.log("Error ", error);
-                setError(error.message);
-                setLoading(false);
-            }
-        );
-    }, []);
+const Map: React.FC<IMapProp> = ({ loading, error, location }) => {
+
 
     return (
         <div className="relative">

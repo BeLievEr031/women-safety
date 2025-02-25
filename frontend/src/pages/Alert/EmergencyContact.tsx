@@ -4,6 +4,8 @@ import EditContactForm from "./EditContactForm";
 import { useAlertMutation, useContactAddMutation, useContactDeleteMutation, useContactFetchQuery } from "../../hooks/useContact";
 import { useUser } from "@clerk/clerk-react";
 import { IContact, IPagination } from "../../types";
+import { useCreateAlertMutation } from "../../hooks/useAlert";
+import toast, { Toaster } from "react-hot-toast";
 
 interface Contact {
     id: number;
@@ -11,10 +13,16 @@ interface Contact {
     phone: string;
 }
 
-const EmergencyContacts: React.FC = () => {
+interface IProp {
+    location: [number, number];
+    loading: boolean;
+}
+
+const EmergencyContacts: React.FC<IProp> = ({ location, loading }) => {
     const { mutate } = useContactAddMutation();
     const { mutate: deleteMutation } = useContactDeleteMutation();
     const { mutate: alertMutation } = useAlertMutation();
+    const { mutate: createAlertMutation, isSuccess } = useCreateAlertMutation();
     const { user } = useUser();
 
     const [pagination] = useState<IPagination>({
@@ -30,6 +38,7 @@ const EmergencyContacts: React.FC = () => {
         { id: 1, name: "John Doe", phone: "+91234567890" },
         { id: 2, name: "Jane Smith", phone: "+91234567891" },
     ]);
+
     const [editingContact, setEditingContact] = useState<Contact | null>(null);
     const [isAdding, setIsAdding] = useState(false);
 
@@ -61,16 +70,28 @@ const EmergencyContacts: React.FC = () => {
     }
 
     const handleSendAlert = () => {
-        const numbers = data?.data?.data?.contacts.map((item: IContact) => {
-            return item.phone
+        // const numbers = data?.data?.data?.contacts.map((item: IContact) => {
+        //     return item.phone
+        // })
+        // alertMutation({ numbers });
+
+        createAlertMutation({
+            lat: location[0],
+            lng: location[1],
+            clerkId: user!.id
         })
-        alertMutation({ numbers });
+    }
+
+    if (isSuccess) {
+        toast.success("Alert has been sent.")
     }
 
     return (
         <div className="max-w-3xl mx-auto mt-10 text-center">
-            <button className="bg-blue-600 text-white px-6 py-2 rounded-md mb-6" onClick={handleSendAlert}>
-                Alert Now
+            <button className="bg-blue-600 text-white px-6 py-2 rounded-md mb-6" onClick={handleSendAlert} disabled={loading}>
+                {!loading ? "Alert Now" :
+                    <p className="w-5 h-5 border-4 border-white border-t-transparent rounded-full animate-spin"></p>
+                }
             </button>
 
             <div className="space-y-4">
@@ -109,6 +130,8 @@ const EmergencyContacts: React.FC = () => {
             {editingContact && (
                 <EditContactForm contact={editingContact} onUpdateContact={handleUpdateContact} onClose={() => setEditingContact(null)} />
             )}
+
+            <Toaster />
         </div>
     );
 };
