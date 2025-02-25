@@ -4,7 +4,7 @@ import { TbMessageCircleFilled } from "react-icons/tb";
 
 function Navbar() {
     return (
-        <nav className="flex items-center justify-between px-6 py-3 border-b border-gray-200 shadow-sm bg-white">
+        <nav className="sticky top-0 z-[999] flex items-center justify-between px-6 py-3 border-b border-gray-200 shadow-sm bg-white">
             {/* Left Side - Logo */}
             <div className="flex items-center space-x-2">
                 <TbMessageCircleFilled className="h-6 w-6 text-purple-500" />
@@ -22,6 +22,11 @@ function Navbar() {
                     `text-sm font-bold ${isActive ? "text-blue-600 border-b-2 border-blue-600" : "text-gray-600 hover:text-blue-600"}`
                 }>
                     Emergency Alerts
+                </NavLink>
+                <NavLink to="/safety/geo-fencing" className={({ isActive }) =>
+                    `text-sm font-bold ${isActive ? "text-blue-600 border-b-2 border-blue-600" : "text-gray-600 hover:text-blue-600"}`
+                }>
+                    Geo Fencing
                 </NavLink>
                 <NavLink to="/safety/track" className={({ isActive }) =>
                     `text-sm font-bold ${isActive ? "text-blue-600 border-b-2 border-blue-600" : "text-gray-600 hover:text-blue-600"}`
