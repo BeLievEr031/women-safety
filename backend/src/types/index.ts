@@ -34,3 +34,13 @@ export interface PaginationRequest extends Request {
 
     }
 }
+
+export interface IAlert {
+    lat: number;
+    lng: number;
+    clerkId: string;
+}
+
+export interface AlertRequest extends Request {
+    body: IAlert
+}

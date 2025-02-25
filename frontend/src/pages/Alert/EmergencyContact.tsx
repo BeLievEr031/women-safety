@@ -60,16 +60,10 @@ const EmergencyContacts: React.FC = () => {
         return <div>{error.message}</div>
     }
 
-    console.log(data);
-
     const handleSendAlert = () => {
-
         const numbers = data?.data?.data?.contacts.map((item: IContact) => {
             return item.phone
         })
-
-        console.log(numbers);
-
         alertMutation({ numbers });
     }
 
