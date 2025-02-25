@@ -3,21 +3,21 @@ import { IContact } from "../types";
 
 class ContactService {
     // Create a new contact
-    async create(contactData: IContact): Promise<IContact> {
-        const contact = new Contact(contactData);
-        return await contact.save();
+    async create(contactData: IContact): Promise<Contact> {
+        return await Contact.create(contactData);
     }
 
     // Get all contacts with pagination
     async getAll(userId: string, page: number, limit: number, sortBy: string, order: string) {
-        const sortOrder = order === "asc" ? 1 : -1;
+        const offset = (page - 1) * limit;
+        const sortOrder = order === "asc" ? "ASC" : "DESC";
 
-        const contacts = await Contact.find({ clerkId: userId })
-            .sort({ [sortBy]: sortOrder })
-            .skip((page - 1) * limit)
-            .limit(limit);
-
-        const totalContacts = await Contact.countDocuments({ clerkId: userId });
+        const { rows: contacts, count: totalContacts } = await Contact.findAndCountAll({
+            where: { clerkId: userId },
+            order: [[sortBy, sortOrder]],
+            offset,
+            limit,
+        });
 
         return {
             contacts,
@@ -25,23 +25,23 @@ class ContactService {
                 totalContacts,
                 currentPage: page,
                 totalPages: Math.ceil(totalContacts / limit),
-            }
+            },
         };
     }
 
     // Get contact by ID
-    async getById(contactId: string): Promise<IContact | null> {
-        return await Contact.findById(contactId);
+    async getById(contactId: number): Promise<Contact | null> {
+        return await Contact.findByPk(contactId);
     }
 
     // Update contact details
-    async update(contactId: string, updateData: Partial<IContact>): Promise<IContact | null> {
-        return await Contact.findByIdAndUpdate(contactId, updateData, { new: true, runValidators: true });
+    async update(contactId: number, updateData: Partial<IContact>): Promise<[number, Contact[]]> {
+        return await Contact.update(updateData, { where: { id: contactId }, returning: true });
     }
 
     // Delete a contact
-    async delete(contactId: string): Promise<IContact | null> {
-        return await Contact.findByIdAndDelete(contactId);
+    async delete(contactId: number): Promise<number> {
+        return await Contact.destroy({ where: { id: contactId } });
     }
 }
 

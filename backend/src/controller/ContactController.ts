@@ -14,15 +14,14 @@ class ContactController {
         try {
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
-                res.status(HTTP_STATUS.BAD_REQUEST).json({ errors: errors.array() });
-                return;
+                return res.status(HTTP_STATUS.BAD_REQUEST).json({ errors: errors.array() });
             }
 
             const contact = await this.contactService.create(req.body);
-            res.status(HTTP_STATUS.CREATED).json({
+            return res.status(HTTP_STATUS.CREATED).json({
                 success: true,
                 data: contact,
-                message: "Contact created successfully."
+                message: "Contact created successfully.",
             });
         } catch (error) {
             next(error);
@@ -34,21 +33,20 @@ class ContactController {
         try {
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
-                res.status(HTTP_STATUS.BAD_REQUEST).json({ errors: errors.array() });
-                return;
+                return res.status(HTTP_STATUS.BAD_REQUEST).json({ errors: errors.array() });
             }
 
-            const userId = req.query.userId!;
+            const userId = req.query.userId as string;
             const page = parseInt(req.query.page as string) || 1;
             const limit = parseInt(req.query.limit as string) || 10;
             const sortBy = (req.query.sortBy as string) || "createdAt";
             const order = (req.query.order as string) || "desc";
 
             const result = await this.contactService.getAll(userId, page, limit, sortBy, order);
-            res.status(HTTP_STATUS.OK).json({
+            return res.status(HTTP_STATUS.OK).json({
                 success: true,
                 message: "Contacts fetched successfully.",
-                data: result
+                data: result,
             });
         } catch (error) {
             next(error);
@@ -60,17 +58,20 @@ class ContactController {
         try {
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
-                res.status(HTTP_STATUS.BAD_REQUEST).json({ errors: errors.array() });
-                return;
+                return res.status(HTTP_STATUS.BAD_REQUEST).json({ errors: errors.array() });
             }
 
-            const contact = await this.contactService.getById(req.params.id);
+            const contactId = Number(req.params.id);
+            if (isNaN(contactId)) {
+                return res.status(HTTP_STATUS.BAD_REQUEST).json({ message: "Invalid contact ID" });
+            }
+
+            const contact = await this.contactService.getById(contactId);
             if (!contact) {
-                res.status(HTTP_STATUS.NOT_FOUND).json({ message: "Contact not found" });
-                return;
+                return res.status(HTTP_STATUS.NOT_FOUND).json({ message: "Contact not found" });
             }
 
-            res.status(HTTP_STATUS.OK).json({ success: true, data: contact });
+            return res.status(HTTP_STATUS.OK).json({ success: true, data: contact });
         } catch (error) {
             next(error);
         }
@@ -81,20 +82,23 @@ class ContactController {
         try {
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
-                res.status(HTTP_STATUS.BAD_REQUEST).json({ errors: errors.array() });
-                return;
+                return res.status(HTTP_STATUS.BAD_REQUEST).json({ errors: errors.array() });
             }
 
-            const updatedContact = await this.contactService.update(req.params.id, req.body);
-            if (!updatedContact) {
-                res.status(HTTP_STATUS.NOT_FOUND).json({ message: "Contact not found" });
-                return;
+            const contactId = Number(req.params.id);
+            if (isNaN(contactId)) {
+                return res.status(HTTP_STATUS.BAD_REQUEST).json({ message: "Invalid contact ID" });
             }
 
-            res.status(HTTP_STATUS.OK).json({
+            const [affectedRows, updatedContact] = await this.contactService.update(contactId, req.body);
+            if (affectedRows === 0) {
+                return res.status(HTTP_STATUS.NOT_FOUND).json({ message: "Contact not found" });
+            }
+
+            return res.status(HTTP_STATUS.OK).json({
                 success: true,
-                data: updatedContact,
-                message: "Contact updated successfully."
+                data: updatedContact[0], // Sequelize returns an array, so we take the first element
+                message: "Contact updated successfully.",
             });
         } catch (error) {
             next(error);
@@ -106,17 +110,20 @@ class ContactController {
         try {
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
-                res.status(HTTP_STATUS.BAD_REQUEST).json({ errors: errors.array() });
-                return;
+                return res.status(HTTP_STATUS.BAD_REQUEST).json({ errors: errors.array() });
             }
 
-            const deletedContact = await this.contactService.delete(req.params.id);
-            if (!deletedContact) {
-                res.status(HTTP_STATUS.NOT_FOUND).json({ message: "Contact not found" });
-                return;
+            const contactId = Number(req.params.id);
+            if (isNaN(contactId)) {
+                return res.status(HTTP_STATUS.BAD_REQUEST).json({ message: "Invalid contact ID" });
             }
 
-            res.status(HTTP_STATUS.OK).json({ success: true, message: "Contact deleted successfully." });
+            const deletedRows = await this.contactService.delete(contactId);
+            if (deletedRows === 0) {
+                return res.status(HTTP_STATUS.NOT_FOUND).json({ message: "Contact not found" });
+            }
+
+            return res.status(HTTP_STATUS.OK).json({ success: true, message: "Contact deleted successfully." });
         } catch (error) {
             next(error);
         }

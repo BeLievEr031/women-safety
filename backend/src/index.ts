@@ -1,10 +1,10 @@
 import Config from "./config/Config";
 import logger from "./config/logger";
-import dbConnect from "./db/dbConnect";
+import { connectDB } from "./db/database";
 import app from "./server";
 
 
-dbConnect().then(() => {
+connectDB().then(() => {
     app.listen(Config.PORT!, () => {
         logger.info("Connected to server at ", Config.PORT)
     })
