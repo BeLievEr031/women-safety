@@ -4,7 +4,9 @@ import ContactService from "../services/ContactService";
 import { contactValidator } from "../validators/contactValidator";
 import { ContactRequest, PaginationRequest } from "../types";
 const router = express.Router();
-const contactController = new ContactController(new ContactService());
+
+const contactService = new ContactService();
+const contactController = new ContactController(contactService);
 
 // Create Contact
 router.post("/", contactValidator, (req: Request, res: Response, next: NextFunction) => contactController.create(req as ContactRequest, res, next));
