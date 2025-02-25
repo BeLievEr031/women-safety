@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import toast, { Toaster } from 'react-hot-toast';
 interface Props {
     onAddContact: (contact: { name: string; phone: string }) => void;
     onClose: () => void;
@@ -11,7 +11,22 @@ const AddContactForm: React.FC<Props> = ({ onAddContact, onClose }) => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        if (!name || !phone) return;
+        if (!name.trim()) {
+            return toast.error("Name is required");
+        } else if (name.trim().length < 3) {
+            return toast.error("Name must be at least 3 characters");
+        }
+
+        if (!phone.trim()) {
+            return toast.error("Phone number is required");
+        } else if (!/^\+91[6-9]\d{9}$/.test(phone.trim())) {
+            return toast.error("Phone number must contain only digits & must have 10 digits after +91");
+        } else if (phone.trim().length != 13) {
+            return toast.error("Phone number must be at least 10 digits");
+        }
+
+
+        toast.success("Contact added successfully!");
         onAddContact({ name, phone });
     };
 
@@ -44,6 +59,7 @@ const AddContactForm: React.FC<Props> = ({ onAddContact, onClose }) => {
                     </div>
                 </form>
             </div>
+            <Toaster />
         </div>
     );
 };

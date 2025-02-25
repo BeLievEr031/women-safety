@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import AddContactForm from "./AddContactForm";
 import EditContactForm from "./EditContactForm";
+import { useContactAddMutation, useContactDeleteMutation, useContactFetchQuery } from "../../hooks/useContact";
+import { useUser } from "@clerk/clerk-react";
+import { IContact, IPagination } from "../../types";
 
 interface Contact {
     id: number;
@@ -9,14 +12,29 @@ interface Contact {
 }
 
 const EmergencyContacts: React.FC = () => {
+    const { mutate } = useContactAddMutation();
+    const { mutate: deleteMutation } = useContactDeleteMutation();
+
+    const { user } = useUser();
+
+    const [pagination] = useState<IPagination>({
+        limit: 20,
+        order: "desc",
+        page: 1,
+        sortBy: "createdAt",
+        userId: user!.id
+    })
+
+    const { isPending, isError, error, data } = useContactFetchQuery(pagination);
     const [contacts, setContacts] = useState<Contact[]>([
-        { id: 1, name: "John Doe", phone: "+1 234 567 890" },
-        { id: 2, name: "Jane Smith", phone: "+1 234 567 891" },
+        { id: 1, name: "John Doe", phone: "+91234567890" },
+        { id: 2, name: "Jane Smith", phone: "+91234567891" },
     ]);
     const [editingContact, setEditingContact] = useState<Contact | null>(null);
     const [isAdding, setIsAdding] = useState(false);
 
     const handleAddContact = (newContact: Contact) => {
+        mutate({ ...newContact, clerkId: user!.id });
         setContacts([...contacts, { ...newContact, id: contacts.length + 1 }]);
         setIsAdding(false);
     };
@@ -31,8 +49,18 @@ const EmergencyContacts: React.FC = () => {
     };
 
     const handleDeleteContact = (id: number) => {
-        setContacts(contacts.filter((contact) => contact.id !== id));
+        deleteMutation(id);
     };
+
+    if (isPending) {
+        return <div>Loading...</div>
+    }
+
+    if (isError) {
+        return <div>{error.message}</div>
+    }
+
+    console.log(data);
 
     return (
         <div className="max-w-3xl mx-auto mt-10 text-center">
@@ -41,11 +69,11 @@ const EmergencyContacts: React.FC = () => {
             </button>
 
             <div className="space-y-4">
-                {contacts.map((contact) => (
+                {data?.data?.data?.contacts?.map((contact: IContact) => (
                     <div key={contact.id} className="flex justify-between items-center border p-4 rounded-lg">
                         <div>
-                            <p className="font-semibold">{contact.name}</p>
-                            <p className="text-gray-600">{contact.phone}</p>
+                            <p className="font-semibold text-left">{contact.name}</p>
+                            <p className="text-gray-600 text-left">{contact.phone}</p>
                         </div>
                         <div className="space-x-4">
                             <button
