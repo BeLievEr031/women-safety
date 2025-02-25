@@ -1,8 +1,14 @@
 import { NavLink } from "react-router-dom";
 import Button from "../Button";
 import { TbMessageCircleFilled } from "react-icons/tb";
+import React from "react";
 
-function Navbar() {
+
+interface INavbar {
+    setReport?: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+function Navbar({ setReport }: INavbar) {
     return (
         <nav className="sticky top-0 z-[999] flex items-center justify-between px-6 py-3 border-b border-gray-200 shadow-sm bg-white">
             {/* Left Side - Logo */}
@@ -36,7 +42,7 @@ function Navbar() {
             </div>
 
             {/* Right Side - Button */}
-            <Button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center">
+            <Button onClick={() => setReport!(true)} className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center">
                 <span className="mr-2">📢</span> Report Incident
             </Button>
         </nav>

@@ -1,8 +1,12 @@
 import React from 'react'
+import PastAlerts from '../../components/ui/PastAlerts'
 
 function Track() {
+    console.log("i am tracking");
     return (
-        <div>Track</div>
+        <div>
+            <PastAlerts />
+        </div>
     )
 }
 

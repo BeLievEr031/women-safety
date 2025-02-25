@@ -58,7 +58,6 @@ const Map: React.FC = () => {
 
         navigator.geolocation.getCurrentPosition(
             (position) => {
-                console.log("Position ", position);
                 setLocation([position.coords.latitude, position.coords.longitude]);
                 setError(null);
                 setLoading(false);
