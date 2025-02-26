@@ -44,3 +44,16 @@ export interface IAlert {
 export interface AlertRequest extends Request {
     body: IAlert
 }
+
+export interface IReportIncident {
+    id?: number;
+    incidentType: string;
+    lat: number;
+    lng: number;
+    description: string;
+    createdAt?: Date;
+}
+
+export interface ReportIncidentRequest extends Request {
+    body: IReportIncident
+}
