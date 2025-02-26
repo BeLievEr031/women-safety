@@ -13,7 +13,7 @@ function Track() {
         order: "desc",
         page: 1,
         sortBy: "createdAt",
-        userId: user!.id
+        userId: user ? user!.id : ""
     })
 
     const { isPending, isError, error, data } = useFetchAlertQuery(pagination);
@@ -31,8 +31,8 @@ function Track() {
 
     return (
         <div>
-            <PastAlerts alerts={data?.data?.data?.alerts} title='Alert' />
-            <PastIncidents incidents={IncidentData?.data?.data?.incidents} title='Reported Incident' />
+            <PastAlerts alerts={data?.data?.data?.alerts || []} title='Alert' />
+            <PastIncidents incidents={IncidentData?.data?.data?.incidents || []} title='Reported Incident' />
         </div>
     )
 }

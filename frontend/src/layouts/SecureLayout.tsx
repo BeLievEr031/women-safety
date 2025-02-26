@@ -16,7 +16,7 @@ function SecureLayout() {
         if (!isSignedIn) {
             navigate("/auth")
         }
-    }, [isLoaded])
+    }, [isLoaded, isSignedIn])
 
     if (!isLoaded) {
         return <div>Loading...</div>

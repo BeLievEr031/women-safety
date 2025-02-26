@@ -30,7 +30,7 @@ const EmergencyContacts: React.FC<IProp> = ({ location, loading }) => {
         order: "desc",
         page: 1,
         sortBy: "createdAt",
-        userId: user!.id
+        userId: user ? user!.id : ""
     })
 
     const { isPending, isError, error, data } = useContactFetchQuery(pagination);

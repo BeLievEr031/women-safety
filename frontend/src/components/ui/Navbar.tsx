@@ -1,7 +1,8 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import Button from "../Button";
 import { TbMessageCircleFilled } from "react-icons/tb";
 import React from "react";
+import { useAuth, useUser } from "@clerk/clerk-react";
 
 
 interface INavbar {
@@ -9,6 +10,13 @@ interface INavbar {
 }
 
 function Navbar({ setReport }: INavbar) {
+    const { isSignedIn } = useUser();
+    const { signOut } = useAuth();
+    const navigate = useNavigate();
+    const handleLogout = () => {
+        signOut();
+        navigate("/", { replace: true })
+    }
     return (
         <nav className="sticky top-0 z-[999] flex items-center justify-between px-6 py-3 border-b border-gray-200 shadow-sm bg-white">
             {/* Left Side - Logo */}
@@ -42,9 +50,14 @@ function Navbar({ setReport }: INavbar) {
             </div>
 
             {/* Right Side - Button */}
-            <Button onClick={() => setReport!(true)} className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center">
-                <span className="mr-2">📢</span> Report Incident
-            </Button>
+            <div className="flex gap-2">
+                <Button onClick={() => setReport!(true)} className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center">
+                    <span className="mr-2">📢</span> Report Incident
+                </Button>
+                {isSignedIn && <Button onClick={handleLogout} variant="danger" className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center">
+                    Logout
+                </Button>}
+            </div>
         </nav>
     );
 }
