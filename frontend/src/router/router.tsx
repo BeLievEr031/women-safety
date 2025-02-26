@@ -6,6 +6,7 @@ import SecureLayout from "../layouts/SecureLayout";
 import Alert from "../pages/Alert/Alert";
 import Track from "../pages/Track/Track";
 import GeoFencing from "../pages/GeoFencing/GeoFencing";
+import TrackUser from "../pages/TrackUser/TrackUser";
 
 const router = createBrowserRouter([
     {
@@ -14,7 +15,11 @@ const router = createBrowserRouter([
         children: [
             {
                 path: "",
-                element: <Home />
+                element: <Home />,
+            },
+            {
+                path: "track-user",
+                element: <TrackUser />
             },
             {
                 path: "/safety",

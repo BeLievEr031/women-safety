@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 interface Alert {
     id: number;
@@ -19,6 +20,7 @@ interface IProp {
 }
 
 const PastAlerts: React.FC<IProp> = ({ alerts }) => {
+    const navigate = useNavigate();
     const extractDateAndTime = (timestamp: string) => {
         const dateObj = new Date(timestamp);
         const formattedDate = dateObj.toLocaleDateString("en-GB");
@@ -43,6 +45,10 @@ const PastAlerts: React.FC<IProp> = ({ alerts }) => {
                         <p className="text-gray-600">Time: {extractDateAndTime(alert.createdAt).formattedTime}</p>
                         <button
                             className="mt-4 w-full text-blue-600 border border-blue-600 py-2 rounded-lg hover:bg-blue-600 hover:text-white transition"
+
+                            onClick={() => {
+                                return navigate(`/track-user?id=${alert.id}&lat=${alert.lat}&lng=${alert.lng}`, { replace: true })
+                            }}
                         >
                             View Alert
                         </button>
