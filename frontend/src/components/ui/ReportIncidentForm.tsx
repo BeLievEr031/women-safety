@@ -1,12 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from "react";
 import Button from "../../components/Button";
+import { IReportIncident } from "../../types";
 
 interface Props {
-    onReportIncident: (incident: {
-        location: { type: "Point"; coordinates: [number, number] };
-        incidentType: string;
-        description: string;
-    }) => void;
+    onReportIncident: (incident: IReportIncident) => void;
     onClose: () => void;
 }
 
@@ -18,7 +16,7 @@ const ReportIncidentForm: React.FC<Props> = ({ onReportIncident, onClose }) => {
     const [lat, setLat] = useState<number | "">("");
     const [lng, setLng] = useState<number | "">("");
 
-    const [location, setLocation] = useState<[number, number]>([0, 0]);
+    const [location, setLocation] = useState<[number, number] | [null, null]>([null, null]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -46,12 +44,14 @@ const ReportIncidentForm: React.FC<Props> = ({ onReportIncident, onClose }) => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        if (!incidentType || !description || lat === "" || lng === "") return;
+
+        if (!incidentType || !description || location[0] === null || location[1] === null) return;
 
         onReportIncident({
-            location: { type: "Point", coordinates: [Number(lng), Number(lat)] },
-            incidentType,
             description,
+            incidentType,
+            lat: location[0],
+            lng: location[1]
         });
     };
 
@@ -85,7 +85,7 @@ const ReportIncidentForm: React.FC<Props> = ({ onReportIncident, onClose }) => {
                     <input
                         type="number"
                         placeholder="Latitude"
-                        value={location[0]}
+                        value={location[0]!}
                         onChange={(e) => setLat(e.target.value ? Number(e.target.value) : "")}
                         className="w-full border px-3 py-2 rounded-md"
                         readOnly
@@ -93,7 +93,7 @@ const ReportIncidentForm: React.FC<Props> = ({ onReportIncident, onClose }) => {
                     <input
                         type="number"
                         placeholder="Longitude"
-                        value={location[1]}
+                        value={location[1]!}
                         onChange={(e) => setLng(e.target.value ? Number(e.target.value) : "")}
                         className="w-full border px-3 py-2 rounded-md"
                         // required

@@ -30,7 +30,7 @@ const router = createBrowserRouter([
                         element: <Alert />
                     },
                     {
-                        path: "track",
+                        path: "history",
                         element: <Track />
                     },
                     {

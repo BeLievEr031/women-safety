@@ -23,3 +23,10 @@ export interface IAlert {
     lng: number;
     clerkId: string;
 }
+
+export interface IReportIncident {
+    incidentType: string;
+    lat: number;
+    lng: number;
+    description: string;
+}

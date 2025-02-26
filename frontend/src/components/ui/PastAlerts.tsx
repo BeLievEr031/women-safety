@@ -16,10 +16,11 @@ interface Alert {
 // ];
 
 interface IProp {
+    title: string;
     alerts: Alert[];
 }
 
-const PastAlerts: React.FC<IProp> = ({ alerts }) => {
+const PastAlerts: React.FC<IProp> = ({ title, alerts }) => {
     const navigate = useNavigate();
     const extractDateAndTime = (timestamp: string) => {
         const dateObj = new Date(timestamp);
@@ -31,7 +32,7 @@ const PastAlerts: React.FC<IProp> = ({ alerts }) => {
     return (
         <div className="max-w-4xl mx-auto p-6">
             {/* Title Section */}
-            <h2 className="text-2xl font-semibold text-center">Past Alerts History</h2>
+            <h2 className="text-2xl font-semibold text-center">Past {title} History</h2>
             <p className="text-gray-500 text-center mt-2">
                 This is list of past locations you've shared or alerts you've sent.
             </p>

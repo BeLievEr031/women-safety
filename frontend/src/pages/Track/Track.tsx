@@ -3,6 +3,8 @@ import PastAlerts from '../../components/ui/PastAlerts'
 import { useFetchAlertQuery } from '../../hooks/useAlert'
 import { useState } from 'react';
 import { IPagination } from '../../types';
+import PastIncidents from '../../components/ui/PastIncidents';
+import { useFetchIncidentQuery } from '../../hooks/useReportIncident';
 
 function Track() {
     const { user } = useUser();
@@ -15,6 +17,7 @@ function Track() {
     })
 
     const { isPending, isError, error, data } = useFetchAlertQuery(pagination);
+    const { data: IncidentData } = useFetchIncidentQuery(pagination);
 
     if (isPending) {
         return <div>Loading...</div>
@@ -28,7 +31,8 @@ function Track() {
 
     return (
         <div>
-            <PastAlerts alerts={data?.data?.data?.alerts} />
+            <PastAlerts alerts={data?.data?.data?.alerts} title='Alert' />
+            <PastIncidents incidents={IncidentData?.data?.data?.incidents} title='Reported Incident' />
         </div>
     )
 }
