@@ -60,12 +60,12 @@ const DangerZones: React.FC = () => {
                             </p>
                         </div>
                         <div className="space-x-4">
-                            <button
+                            {/* <button
                                 onClick={() => setEditingZone(zone)}
                                 className="text-blue-600"
                             >
                                 Edit
-                            </button>
+                            </button> */}
                             <button
                                 onClick={() => handleDeleteZone(zone.id)}
                                 className="text-red-600"

@@ -14,8 +14,8 @@ function Navbar({ setReport }: INavbar) {
     const { signOut } = useAuth();
     const navigate = useNavigate();
     const handleLogout = () => {
-        signOut();
         navigate("/", { replace: true })
+        signOut();
     }
     return (
         <nav className="sticky top-0 z-[999] flex items-center justify-between px-6 py-3 border-b border-gray-200 shadow-sm bg-white">

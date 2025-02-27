@@ -102,12 +102,12 @@ const EmergencyContacts: React.FC<IProp> = ({ location, loading }) => {
                             <p className="text-gray-600 text-left">{contact.phone}</p>
                         </div>
                         <div className="space-x-4">
-                            <button
+                            {/* <button
                                 onClick={() => setEditingContact(contact)}
                                 className="text-blue-600"
                             >
                                 Edit
-                            </button>
+                            </button> */}
                             <button
                                 onClick={() => handleDeleteContact(contact.id)}
                                 className="text-red-600"
