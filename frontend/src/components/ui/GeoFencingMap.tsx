@@ -4,6 +4,7 @@ import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import "leaflet-defaulticon-compatibility";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
+import { DangerZone } from "../../pages/GeoFencing/DangerZones";
 
 // Custom icon
 const customIcon = new L.Icon({
@@ -18,20 +19,26 @@ const MapViewUpdater = ({ position }: { position: [number, number] }) => {
     return null;
 };
 
-const GeoFencingMap: React.FC = () => {
-    const locations = [
-        { name: "Taj Mahal", lat: 27.175144, lng: 78.042142 },
-        { name: "Central Park", lat: 40.785091, lng: -73.968285 },
-        { name: "Eiffel Tower", lat: 48.858844, lng: 2.294351 },
-        { name: "Sydney Opera House", lat: -33.856784, lng: 151.215297 },
-        { name: "Great Wall of China", lat: 40.431908, lng: 116.570374 },
-    ];
 
-    const initialPosition: [number, number] = [locations[0].lat, locations[0].lng];
+
+interface IProp {
+    locations: DangerZone[] | []
+}
+
+const GeoFencingMap: React.FC<IProp> = ({ locations = [] }) => {
+    // const locations = [
+    //     { name: "Taj Mahal", lat: 27.175144, lng: 78.042142 },
+    //     { name: "Central Park", lat: 40.785091, lng: -73.968285 },
+    //     { name: "Eiffel Tower", lat: 48.858844, lng: 2.294351 },
+    //     { name: "Sydney Opera House", lat: -33.856784, lng: 151.215297 },
+    //     { name: "Great Wall of China", lat: 40.431908, lng: 116.570374 },
+    // ];
+
+    const initialPosition: [number, number] = [locations[0]?.lat, locations[0]?.lng];
 
     return (
         <div className="relative">
-            <MapContainer center={initialPosition} zoom={2} className="h-96 w-full rounded-lg">
+            {locations.length > 0 && <MapContainer center={initialPosition} zoom={2} className="h-96 w-full rounded-lg">
                 <MapViewUpdater position={initialPosition} />
                 <TileLayer
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -39,7 +46,7 @@ const GeoFencingMap: React.FC = () => {
                 />
 
                 {/* Render markers and circles */}
-                {locations.map((location, index) => (
+                {locations.length > 0 && locations.map((location, index) => (
                     <React.Fragment key={index}>
                         <MarkerWithZoom location={location} />
                         {/* Blue Circle with 50m Radius */}
@@ -50,13 +57,13 @@ const GeoFencingMap: React.FC = () => {
                         />
                     </React.Fragment>
                 ))}
-            </MapContainer>
+            </MapContainer>}
         </div>
     );
 };
 
 // 🔍 Component for Marker with Click-to-Zoom Feature
-const MarkerWithZoom = ({ location }: { location: { name: string; lat: number; lng: number } }) => {
+const MarkerWithZoom = ({ location }: { location: { zoneName: string; lat: number; lng: number } }) => {
     const map = useMap();
 
     const handleMarkerClick = () => {
@@ -65,7 +72,7 @@ const MarkerWithZoom = ({ location }: { location: { name: string; lat: number; l
 
     return (
         <Marker position={[location.lat, location.lng]} icon={customIcon} eventHandlers={{ click: handleMarkerClick }}>
-            <Popup>📍 {location.name}</Popup>
+            <Popup>📍 {location.zoneName}</Popup>
         </Marker>
     );
 };

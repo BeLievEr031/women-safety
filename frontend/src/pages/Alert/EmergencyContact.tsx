@@ -95,7 +95,7 @@ const EmergencyContacts: React.FC<IProp> = ({ location, loading }) => {
             </button>
 
             <div className="space-y-4">
-                {data?.data?.data?.contacts?.map((contact: IContact) => (
+                {data?.data?.data?.contacts && data?.data?.data?.contacts?.map((contact: IContact) => (
                     <div key={contact.id} className="flex justify-between items-center border p-4 rounded-lg">
                         <div>
                             <p className="font-semibold text-left">{contact.name}</p>

@@ -30,3 +30,10 @@ export interface IReportIncident {
     lng: number;
     description: string;
 }
+
+export interface IDangerZone {
+    lat: number;
+    lng: number;
+    clerkId: string;
+    zoneName: string;
+}

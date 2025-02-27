@@ -1,5 +1,5 @@
 import api from ".";
-import { IAlert, IContact, IPagination, IPhone, IReportIncident } from "../types";
+import { IAlert, IContact, IDangerZone, IPagination, IPhone, IReportIncident } from "../types";
 
 export const createContact = (data: IContact) => api.post("/contact", data)
 
@@ -21,3 +21,10 @@ export const fetchAlert = (pagination: IPagination) => api.get(`/alert?page=${pa
 export const createIncident = (data: IReportIncident) => api.post("/report-incident", data)
 
 export const fetchIncident = (pagination: IPagination) => api.get(`/report-incident?page=${pagination.page}&limit=${pagination.limit}&sortBy=${pagination.sortBy}&order=${pagination.order}`)
+
+// CRUD for Danger zone
+
+export const createDangerZone = (data: IDangerZone) => api.post("/danger-zone", data)
+export const fetchDangerZone = (pagination: IPagination) => api.get(`/danger-zone?page=${pagination.page}&limit=${pagination.limit}&sortBy=${pagination.sortBy}&order=${pagination.order}&userId=${pagination.userId!}`)
+
+export const deleteDangerZone = (id: number) => api.delete(`/danger-zone/${id}`)

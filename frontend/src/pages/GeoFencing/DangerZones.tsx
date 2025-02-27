@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import AddDangerZoneForm from "./AddDangerZoneForm";
-import EditDangerZoneForm from "./EditDangerZoneForm";
+// import EditDangerZoneForm from "./EditDangerZoneForm";
 import { MdOutlineAddLocationAlt } from "react-icons/md";
 import Button from "../../components/Button";
-interface DangerZone {
+import { useDangerZoneAddMutation } from "../../hooks/useDangerZone";
+import { useUser } from "@clerk/clerk-react";
+export interface DangerZone {
+    zoneName: string;
     id: number;
     name: string;
     lat: number;
@@ -11,31 +14,36 @@ interface DangerZone {
 }
 
 
-const DangerZones: React.FC = () => {
-    const [zones, setZones] = useState<DangerZone[]>([
-        { id: 1, name: "Central Park", lat: 40.785091, lng: -73.968285 },
-        { id: 2, name: "Eiffel Tower", lat: 48.858844, lng: 2.294351 },
-    ]);
+interface Iprop {
+    zones: DangerZone[] | []
+}
 
-    const [editingZone, setEditingZone] = useState<DangerZone | null>(null);
+const DangerZones: React.FC<Iprop> = ({ zones = [] }) => {
+    const { user } = useUser();
+    const { mutate } = useDangerZoneAddMutation();
+
+    // const [editingZone, setEditingZone] = useState<DangerZone | null>(null);
     const [isAdding, setIsAdding] = useState(false);
 
     // Function to add a new danger zone
     const handleAddZone = (newZone: DangerZone) => {
-        const newId = zones.length > 0 ? Math.max(...zones.map((z) => z.id)) + 1 : 1;
-        setZones([...zones, { ...newZone, id: newId }]);
+        mutate({
+            zoneName: newZone.name,
+            lat: newZone.lat,
+            lng: newZone.lng,
+            clerkId: user!.id
+        });
         setIsAdding(false);
     };
 
     // Function to update an existing danger zone
-    const handleUpdateZone = (updatedZone: DangerZone) => {
-        setZones(zones.map((zone) => (zone.id === updatedZone.id ? updatedZone : zone)));
-        setEditingZone(null);
-    };
+    // const handleUpdateZone = (updatedZone: DangerZone) => {
+    //     setEditingZone(null);
+    // };
 
     // Function to delete a danger zone
     const handleDeleteZone = (id: number) => {
-        setZones(zones.filter((zone) => zone.id !== id));
+        console.log(id);
     };
 
     return (
@@ -51,10 +59,10 @@ const DangerZones: React.FC = () => {
             </div>
 
             <div className="grid grid-cols-2 gap-4">
-                {zones.map((zone) => (
+                {zones && zones.map((zone) => (
                     <div key={zone.id} className="flex justify-between items-center border p-4 rounded-lg">
                         <div>
-                            <p className="font-semibold  text-left">{zone.name}</p>
+                            <p className="font-semibold  text-left">{zone.zoneName}</p>
                             <p className="text-gray-600">
                                 Lat: {zone.lat.toFixed(6)}, Lng: {zone.lng.toFixed(6)}
                             </p>
@@ -86,13 +94,13 @@ const DangerZones: React.FC = () => {
             )}
 
             {/* Edit Danger Zone Form */}
-            {editingZone && (
-                <EditDangerZoneForm
-                    zone={editingZone}
-                    onUpdateZone={handleUpdateZone}
-                    onClose={() => setEditingZone(null)}
-                />
-            )}
+            {/* {editingZone && (
+                // <EditDangerZoneForm
+                //     zone={editingZone}
+                //     onUpdateZone={handleUpdateZone}
+                //     onClose={() => setEditingZone(null)}
+                // />
+            )} */}
         </div>
     );
 };
