@@ -57,3 +57,14 @@ export interface IReportIncident {
 export interface ReportIncidentRequest extends Request {
     body: IReportIncident
 }
+
+export interface IDangerZone {
+    lat: number;
+    lng: number;
+    clerkId: string;
+    zoneName: string;
+}
+
+export interface DangerZoneRequest extends Request {
+    body: IDangerZone
+}

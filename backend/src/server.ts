@@ -3,6 +3,7 @@ import cors from "cors"
 import contactRouter from "./routes/contactRouter";
 import alertRouter from "./routes/alertRouter";
 import reportIncidentRouter from "./routes/reportIncidentRouter";
+import dangerZoneRouter from "./routes/dangerZoneRouter";
 
 const app = express();
 
@@ -17,4 +18,5 @@ app.use(cors({
 app.use("/api/v1/contact", contactRouter)
 app.use("/api/v1/alert", alertRouter)
 app.use("/api/v1/report-incident", reportIncidentRouter)
+app.use("/api/v1/danger-zone", dangerZoneRouter)
 export default app;
