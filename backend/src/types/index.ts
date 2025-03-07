@@ -13,7 +13,8 @@ export interface ContactRequest extends Request {
 
 
 export interface IPhone {
-    numbers: string[]
+    numbers: string[];
+    url: string;
 }
 
 export interface SendAlertRequest {

@@ -1,6 +1,7 @@
 import { useUser } from "@clerk/clerk-react"
 import React, { useEffect } from "react"
 import { Outlet, useNavigate } from "react-router-dom"
+import BatteryNetworkStatus from "../components/ui/BatteryNetworkStatus";
 
 function RootLayout() {
     const { isSignedIn, isLoaded } = useUser()
@@ -18,6 +19,7 @@ function RootLayout() {
     return (
         <React.Fragment>
             <Outlet />
+            <BatteryNetworkStatus />
         </React.Fragment>
     )
 }

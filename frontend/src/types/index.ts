@@ -15,8 +15,10 @@ export interface IPagination {
 }
 
 export interface IPhone {
-    numbers: string[]
+    numbers: string[];
+    url: string;
 }
+
 
 export interface IAlert {
     lat: number;

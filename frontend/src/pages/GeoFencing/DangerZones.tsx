@@ -5,12 +5,17 @@ import { MdOutlineAddLocationAlt } from "react-icons/md";
 import Button from "../../components/Button";
 import { useDangerZoneAddMutation } from "../../hooks/useDangerZone";
 import { useUser } from "@clerk/clerk-react";
+import axios from "axios";
+import toast from "react-hot-toast";
 export interface DangerZone {
     zoneName: string;
     id: number;
     name: string;
     lat: number;
     lng: number;
+    setLat: React.Dispatch<React.SetStateAction<number>>,
+    setLng: React.Dispatch<React.SetStateAction<number>>
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 
@@ -26,14 +31,34 @@ const DangerZones: React.FC<Iprop> = ({ zones = [] }) => {
     const [isAdding, setIsAdding] = useState(false);
 
     // Function to add a new danger zone
-    const handleAddZone = (newZone: DangerZone) => {
-        mutate({
-            zoneName: newZone.name,
-            lat: newZone.lat,
-            lng: newZone.lng,
-            clerkId: user!.id
-        });
-        setIsAdding(false);
+    const handleAddZone = async (newZone: DangerZone) => {
+        newZone.setLoading(true)
+        const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${newZone.name}&key=${import.meta.env.VITE_GOOGLE_MAPS_API_KEY}`)
+
+        if (response.data.status === "OK") {
+            const location = response.data.results[0].geometry.location;
+            console.log(`Latitude: ${location.lat}, Longitude: ${location.lng}`);
+            newZone.setLat(location.lat)
+            newZone.setLng(location.lng)
+
+            setTimeout(() => {
+                mutate({
+                    zoneName: newZone.name,
+                    lat: location.lat,
+                    lng: location.lng,
+                    clerkId: user!.id
+                });
+                setIsAdding(false);
+                toast.success("Safer zone added.")
+                newZone.setLoading(false)
+
+            }, 1500)
+        } else {
+            newZone.setLoading(false)
+            console.error("Error: ", response.data.status);
+        }
+
+
     };
 
     // Function to update an existing danger zone
@@ -54,7 +79,7 @@ const DangerZones: React.FC<Iprop> = ({ zones = [] }) => {
                     onClick={() => setIsAdding(true)}
                     className="bg-blue-600 text-white px-6 py-2 rounded-md mt-6"
                 >
-                    Add Danger Zone
+                    Add Safe Zone
                 </Button>
             </div>
 

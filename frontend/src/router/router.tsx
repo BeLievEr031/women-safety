@@ -7,6 +7,7 @@ import Alert from "../pages/Alert/Alert";
 import Track from "../pages/Track/Track";
 import GeoFencing from "../pages/GeoFencing/GeoFencing";
 import TrackUser from "../pages/TrackUser/TrackUser";
+import Training from "../pages/Training/Training";
 
 const router = createBrowserRouter([
     {
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
                     {
                         path: "geo-fencing",
                         element: <GeoFencing />
+                    },
+                    {
+                        path: "training",
+                        element: <Training />
                     },
                 ]
             },

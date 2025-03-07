@@ -70,11 +70,13 @@ const EmergencyContacts: React.FC<IProp> = ({ location, loading }) => {
     }
 
     const handleSendAlert = () => {
-        // const numbers = data?.data?.data?.contacts.map((item: IContact) => {
-        //     return item.phone
-        // })
-        // alertMutation({ numbers });
+        const numbers = data?.data?.data?.contacts.map((item: IContact) => {
+            return item.phone
+        })
 
+        const url = `http://localhost:5173/track-user?id=6&lat=${location[0]}&lng=${location[1]}`
+
+        alertMutation({ numbers, url })
         createAlertMutation({
             lat: location[0],
             lng: location[1],

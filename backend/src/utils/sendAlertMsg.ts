@@ -14,14 +14,15 @@ const sns = new AWS.SNS();
  * Function to send OTP to multiple phone numbers
  * @param {string[]} phoneNumbers - Array of phone numbers in E.164 format
  */
-const sendOTPs = async (phoneNumbers: string[]) => {
+const sendOTPs = async (phoneNumbers: string[], url: string) => {
     try {
         const results = await Promise.all(
             phoneNumbers.map(async (phoneNumber: string) => {
                 const otp = Math.floor(100000 + Math.random() * 900000).toString(); // Generate OTP
 
                 const params = {
-                    Message: `Hi bind kaisa he `,
+                    Message: `Your friend has been sent an alert check his/her location:
+                    url: ${url}`,
                     PhoneNumber: phoneNumber, // Must be in E.164 format
                 };
 
@@ -40,6 +41,5 @@ const sendOTPs = async (phoneNumbers: string[]) => {
 };
 
 // Example usage with an array of numbers
-
 export default sendOTPs;
 

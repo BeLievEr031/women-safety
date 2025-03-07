@@ -42,6 +42,11 @@ function Navbar({ setReport }: INavbar) {
                 }>
                     Geo Fencing
                 </NavLink>
+                <NavLink to="/safety/training" className={({ isActive }) =>
+                    `text-sm font-bold ${isActive ? "text-blue-600 border-b-2 border-blue-600" : "text-gray-600 hover:text-blue-600"}`
+                }>
+                    Training Video
+                </NavLink>
                 <NavLink to="/safety/history" className={({ isActive }) =>
                     `text-sm font-bold ${isActive ? "text-blue-600 border-b-2 border-blue-600" : "text-gray-600 hover:text-blue-600"}`
                 }>
